@@ -16,18 +16,18 @@ public class ImageEntity extends MotionEntity {
 
     public ImageEntity(@NonNull Layer layer,
                        @NonNull Bitmap bitmap,
-                       @IntRange(from = 1) int parentWidth,
-                       @IntRange(from = 1) int parentHeight) {
-        super(layer, parentWidth, parentHeight);
+                       @IntRange(from = 1) int canvasWidth,
+                       @IntRange(from = 1) int canvasHeight) {
+        super(layer, canvasWidth, canvasHeight);
 
         this.bitmap = bitmap;
         float width = bitmap.getWidth();
         float height = bitmap.getHeight();
 
-        float widthAspect = 1.0F * parentWidth / width;
-        float heightAspect = 1.0F * parentHeight / height;
-
-        this.holyScale = Math.min(widthAspect, heightAspect);
+        float widthAspect = 1.0F * canvasWidth / width;
+        float heightAspect = 1.0F * canvasHeight / height;
+        // fit the smallest size
+        holyScale = Math.min(widthAspect, heightAspect);
 
         // initial position of the entity
         srcPoints[0] = 0; srcPoints[1] = 0;

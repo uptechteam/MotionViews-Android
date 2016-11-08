@@ -32,7 +32,7 @@ public abstract class MotionEntity {
 
     /**
      * maximum scale of the initial image, so that
-     * the entity still fits within the parent
+     * the entity still fits within the parent canvas
      */
     protected float holyScale;
 
@@ -40,12 +40,12 @@ public abstract class MotionEntity {
      * width of canvas the entity is drawn in
      */
     @IntRange(from = 0)
-    protected int parentWidth;
+    protected int canvasWidth;
     /**
      * height of canvas the entity is drawn in
      */
     @IntRange(from = 0)
-    protected int parentHeight;
+    protected int canvasHeight;
 
     /**
      * Destination points of the entity
@@ -64,11 +64,11 @@ public abstract class MotionEntity {
     protected Paint borderPaint = new Paint();
 
     public MotionEntity(@NonNull Layer layer,
-                        @IntRange(from = 1) int parentWidth,
-                        @IntRange(from = 1) int parentHeight) {
+                        @IntRange(from = 1) int canvasWidth,
+                        @IntRange(from = 1) int canvasHeight) {
         this.layer = layer;
-        this.parentWidth = parentWidth;
-        this.parentHeight = parentHeight;
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
     }
 
     public boolean isSelected() {
@@ -98,8 +98,8 @@ public abstract class MotionEntity {
         // init matrix to E - identity matrix
         matrix.reset();
 
-        float topLeftX = layer.getX() * parentWidth;
-        float topLeftY = layer.getY() * parentHeight;
+        float topLeftX = layer.getX() * canvasWidth;
+        float topLeftY = layer.getY() * canvasHeight;
 
         float centerX = topLeftX + getWidth() * holyScale * 0.5F;
         float centerY = topLeftY + getHeight() * holyScale * 0.5F;
@@ -130,19 +130,19 @@ public abstract class MotionEntity {
     }
 
     public float absoluteCenterX() {
-        float topLeftX = layer.getX() * parentWidth;
+        float topLeftX = layer.getX() * canvasWidth;
         return topLeftX + getWidth() * holyScale * 0.5F;
     }
 
     public float absoluteCenterY() {
-        float topLeftY = layer.getY() * parentHeight;
+        float topLeftY = layer.getY() * canvasHeight;
 
         return topLeftY + getHeight() * holyScale * 0.5F;
     }
 
     public PointF absoluteCenter() {
-        float topLeftX = layer.getX() * parentWidth;
-        float topLeftY = layer.getY() * parentHeight;
+        float topLeftX = layer.getX() * canvasWidth;
+        float topLeftY = layer.getY() * canvasHeight;
 
         float centerX = topLeftX + getWidth() * holyScale * 0.5F;
         float centerY = topLeftY + getHeight() * holyScale * 0.5F;
@@ -150,14 +150,14 @@ public abstract class MotionEntity {
         return new PointF(centerX, centerY);
     }
 
-    public void moveToParentCenter() {
-        moveCenterTo(new PointF(parentWidth * 0.5F, parentHeight * 0.5F));
+    public void moveToCanvasCenter() {
+        moveCenterTo(new PointF(canvasWidth * 0.5F, canvasHeight * 0.5F));
     }
 
     public void moveCenterTo(PointF moveToCenter) {
         PointF currentCenter = absoluteCenter();
-        layer.postTranslate(1.0F * (moveToCenter.x - currentCenter.x) / parentWidth,
-                1.0F * (moveToCenter.y - currentCenter.y) / parentHeight);
+        layer.postTranslate(1.0F * (moveToCenter.x - currentCenter.x) / canvasWidth,
+                1.0F * (moveToCenter.y - currentCenter.y) / canvasHeight);
     }
 
     private final PointF pA = new PointF();

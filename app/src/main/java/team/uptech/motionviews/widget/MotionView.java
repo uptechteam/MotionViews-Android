@@ -204,7 +204,7 @@ public class MotionView  extends FrameLayout {
     }
 
     private void initialTranslateAndScale(@NonNull MotionEntity entity) {
-        entity.moveToParentCenter();
+        entity.moveToCanvasCenter();
         entity.getLayer().setScale(entity.getLayer().initialScale());
     }
 
