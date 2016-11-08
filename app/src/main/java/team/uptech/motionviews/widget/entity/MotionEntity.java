@@ -51,6 +51,7 @@ public abstract class MotionEntity {
      * Destination points of the entity
      * 5 points. Size of array - 10; Starting upper left corner, clockwise
      * last point is the same as first to close the circle
+     * NOTE: saved as a field variable in order to avoid creating array in draw()-like methods
      */
     protected final float[] destPoints = new float[10]; // x0, y0, x1, y1, x2, y2, x3, y3, x0, y0
     /**
@@ -78,8 +79,23 @@ public abstract class MotionEntity {
         this.isSelected = isSelected;
     }
 
+    /**
+     * S - scale matrix, R - rotate matrix, T - translate matrix,
+     * L - result transformation matrix
+     * <p>
+     * The correct order of applying transformations is : L = S * R * T
+     * <p>
+     * See more info: <a href="http://gamedev.stackexchange.com/questions/29260/transform-matrix-multiplication-order">Game Dev: Transform Matrix multiplication order</a>
+     * <p>
+     * Preconcat works like M` = M * S, so we apply preScale -> preRotate -> preTranslate
+     * the result will be the same: L = S * R * T
+     * <p>
+     * NOTE: postconcat (postScale, etc.) works the other way : M` = S * M, in order to use it
+     * we'd need to reverse the order of applying
+     * transformations : post holy scale ->  postTranslate -> postRotate -> postScale
+     */
     protected void updateMatrix() {
-        // init matrix
+        // init matrix to E - identity matrix
         matrix.reset();
 
         float topLeftX = layer.getX() * parentWidth;
@@ -88,27 +104,29 @@ public abstract class MotionEntity {
         float centerX = topLeftX + getWidth() * holyScale * 0.5F;
         float centerY = topLeftY + getHeight() * holyScale * 0.5F;
 
-        // initial holy scale
-        matrix.postScale(holyScale, holyScale);
-
-        // translate
-        matrix.postTranslate(topLeftX, topLeftY);
-
         // calculate params
         float rotationInDegree = layer.getRotationInDegrees();
         float scaleX = layer.getScale();
         float scaleY = layer.getScale();
         if (layer.isFlipped()) {
-            // flip (by X-coordinate) if need
+            // flip (by X-coordinate) if needed
             rotationInDegree *= -1.0F;
             scaleX *= -1.0F;
         }
 
-        // rotate
-        matrix.postRotate(rotationInDegree, centerX, centerY);
+        // applying transformations : L = S * R * T
 
         // scale
-        matrix.postScale(scaleX, scaleY, centerX, centerY);
+        matrix.preScale(scaleX, scaleY, centerX, centerY);
+
+        // rotate
+        matrix.preRotate(rotationInDegree, centerX, centerY);
+
+        // translate
+        matrix.preTranslate(topLeftX, topLeftY);
+
+        // applying holy scale - S`, the result will be : L = S * R * T * S`
+        matrix.preScale(holyScale, holyScale);
     }
 
     public float absoluteCenterX() {
@@ -150,7 +168,8 @@ public abstract class MotionEntity {
     /**
      * For more info:
      * <a href="http://math.stackexchange.com/questions/190111/how-to-check-if-a-point-is-inside-a-rectangle">StackOverflow: How to check point is in rectangle</a>
-     *
+     * <p>NOTE: it's easier to apply the same transformation matrix (calculated before) to the original source points, rather than
+     * calculate the result points ourselves
      * @param point point
      * @return true if point (x, y) is inside the triangle
      */

@@ -170,8 +170,8 @@ public class MotionView  extends FrameLayout {
         selectEntity(null, false);
 
         Bitmap bmp = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-        // IMPORTANT: always create white background, as the image is saved in JPEG format,
-        // don't leave transparent pixels
+        // IMPORTANT: always create white background, cos if the image is saved in JPEG format,
+        // which doesn't have transparent pixels, the background will be black
         bmp.eraseColor(Color.WHITE);
         Canvas canvas = new Canvas(bmp);
         drawAllEntities(canvas);

@@ -22,7 +22,7 @@ public class MathUtils {
         boolean b2 = crossProduct(pt, v2, v3) < 0.0f;
         boolean b3 = crossProduct(pt, v3, v1) < 0.0f;
 
-        return ((b1 == b2) && (b2 == b3));
+        return (b1 == b2) && (b2 == b3);
     }
 
     /**
