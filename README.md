@@ -1,6 +1,6 @@
 # MotionViews-Android
 
-## Code Guide : How to create Snapchat-like stickers for Android**
+## Code Guide : How to create Snapchat-like stickers for Android
 
 After spending 2000+ hours and releasing 4+ successful apps working with 
 image transformations, we’ve decided to share our experience with the community.
