@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -82,7 +83,6 @@ public class MotionView  extends FrameLayout {
         init(context, attrs);
     }
 
-
     private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         // I fucking love Android
         setWillNotDraw(false);
@@ -95,7 +95,7 @@ public class MotionView  extends FrameLayout {
         this.scaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
         this.rotateGestureDetector = new RotateGestureDetector(context, new RotateListener());
         this.moveGestureDetector = new MoveGestureDetector(context, new MoveListener());
-        this.gestureDetectorCompat = new GestureDetectorCompat(context, new TapListener());
+        this.gestureDetectorCompat = new GestureDetectorCompat(context, new TapsListener());
 
         setOnTouchListener(onTouchListener);
 
@@ -320,28 +320,11 @@ public class MotionView  extends FrameLayout {
         }
     };
 
-
-    private class TapListener implements GestureDetector.OnGestureListener {
-
+    private class TapsListener extends GestureDetector.SimpleOnGestureListener {
         @Override
-        public boolean onDown(MotionEvent e) {
-            return false;
-        }
-
-        @Override
-        public void onShowPress(MotionEvent e) {
-
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            updateSelectionOnTap(e);
-            return false;
-        }
-
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            return false;
+        public boolean onDoubleTap(MotionEvent e) {
+            Log.d(TAG, "Double Tap");
+            return true;
         }
 
         @Override
@@ -350,8 +333,9 @@ public class MotionView  extends FrameLayout {
         }
 
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            return false;
+        public boolean onSingleTapUp(MotionEvent e) {
+            updateSelectionOnTap(e);
+            return true;
         }
     }
 
