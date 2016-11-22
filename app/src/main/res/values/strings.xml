@@ -4,6 +4,6 @@
 
     <string name="select_color">Select color</string>
     <string name="ok">OK</string>
-    <string name="cancel">OK</string>
+    <string name="cancel">Cancel</string>
     <string name="select_font">Select font</string>
 </resources>
