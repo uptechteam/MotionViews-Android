@@ -58,14 +58,4 @@ public class ImageEntity extends MotionEntity {
             bitmap.recycle();
         }
     }
-
-    @Override
-    protected void finalize() throws Throwable {
-        try {
-            release();
-        } finally {
-            //noinspection ThrowFromFinallyBlock
-            super.finalize();
-        }
-    }
 }

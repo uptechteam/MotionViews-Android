@@ -194,8 +194,8 @@ public abstract class MotionEntity {
     /**
      * http://judepereira.com/blog/calculate-the-real-scale-factor-and-the-angle-of-rotation-from-an-android-matrix/
      *
-     * @param canvas
-     * @param drawingPaint
+     * @param canvas Canvas to draw
+     * @param drawingPaint Paint to use during drawing
      */
     public final void draw(@NonNull Canvas canvas, @Nullable Paint drawingPaint) {
 
@@ -244,5 +244,15 @@ public abstract class MotionEntity {
 
     public void release() {
         // free resources here
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            release();
+        } finally {
+            //noinspection ThrowFromFinallyBlock
+            super.finalize();
+        }
     }
 }

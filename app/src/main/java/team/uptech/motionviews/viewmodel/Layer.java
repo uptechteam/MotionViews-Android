@@ -2,7 +2,6 @@ package team.uptech.motionviews.viewmodel;
 
 import android.support.annotation.FloatRange;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
 public class Layer {
 
     /**
