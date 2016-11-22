@@ -1,20 +1,33 @@
 package team.uptech.motionviews.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+
+import java.util.List;
 
 import team.uptech.motionviews.R;
+import team.uptech.motionviews.ui.adapter.FontsAdapter;
 import team.uptech.motionviews.utils.FontProvider;
 import team.uptech.motionviews.viewmodel.Font;
 import team.uptech.motionviews.viewmodel.Layer;
 import team.uptech.motionviews.viewmodel.TextLayer;
 import team.uptech.motionviews.widget.MotionView;
 import team.uptech.motionviews.widget.entity.ImageEntity;
+import team.uptech.motionviews.widget.entity.MotionEntity;
 import team.uptech.motionviews.widget.entity.TextEntity;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,8 +35,25 @@ public class MainActivity extends AppCompatActivity {
     public static final int SELECT_STICKER_REQUEST_CODE = 123;
 
     protected MotionView motionView;
+    protected View textEntityEditPanel;
 
     private FontProvider fontProvider;
+
+    private final MotionView.MotionViewCallback motionViewCallback = new MotionView.MotionViewCallback() {
+        @Override
+        public void onEntitySelected(@Nullable MotionEntity entity) {
+            if (entity instanceof TextEntity) {
+                textEntityEditPanel.setVisibility(View.VISIBLE);
+            } else {
+                textEntityEditPanel.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        public void onEntityDoubleTap(@NonNull MotionEntity entity) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +63,14 @@ public class MainActivity extends AppCompatActivity {
         this.fontProvider = new FontProvider(getResources());
 
         motionView = (MotionView) findViewById(R.id.main_motion_view);
+        textEntityEditPanel = findViewById(R.id.main_motion_text_entity_edit_panel);
+        motionView.setMotionViewCallback(motionViewCallback);
 
         addSticker(R.drawable.pikachu_2);
 
         addTextSticker();
+
+        initTextEntitiesListeners();
     }
 
     protected void addTextSticker() {
@@ -63,6 +97,119 @@ public class MainActivity extends AppCompatActivity {
                 motionView.addEntityAndPosition(entity);
             }
         });
+    }
+
+    private void initTextEntitiesListeners() {
+        findViewById(R.id.text_entity_font_size_increase).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                increaseTextEntitySize();
+            }
+        });
+        findViewById(R.id.text_entity_font_size_decrease).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                decreaseTextEntitySize();
+            }
+        });
+        findViewById(R.id.text_entity_color_change).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeTextEntityColor();
+            }
+        });
+        findViewById(R.id.text_entity_font_change).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeTextEntityFont();
+            }
+        });
+        findViewById(R.id.text_entity_edit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+    }
+
+    private void increaseTextEntitySize() {
+        TextEntity textEntity = currentTextEntity();
+        if (textEntity != null) {
+            textEntity.getLayer().getFont().increaseSize(TextLayer.Limits.FONT_SIZE_STEP);
+            textEntity.updateEntity();
+            motionView.invalidate();
+        }
+    }
+
+    private void decreaseTextEntitySize() {
+        TextEntity textEntity = currentTextEntity();
+        if (textEntity != null) {
+            textEntity.getLayer().getFont().decreaseSize(TextLayer.Limits.FONT_SIZE_STEP);
+            textEntity.updateEntity();
+            motionView.invalidate();
+        }
+    }
+
+    private void changeTextEntityColor() {
+        TextEntity textEntity = currentTextEntity();
+        if (textEntity == null) {
+            return;
+        }
+
+        int initialColor = textEntity.getLayer().getFont().getColor();
+
+        ColorPickerDialogBuilder
+                .with(MainActivity.this)
+                .setTitle(R.string.select_color)
+                .initialColor(initialColor)
+                .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
+                .density(8)
+                .setPositiveButton(R.string.ok, new ColorPickerClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                        TextEntity textEntity = currentTextEntity();
+                        if (textEntity != null) {
+                            textEntity.getLayer().getFont().setColor(selectedColor);
+                            textEntity.updateEntity();
+                            motionView.invalidate();
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .build()
+                .show();
+    }
+
+    private void changeTextEntityFont() {
+        final List<String> fonts = fontProvider.getFontNames();
+        FontsAdapter fontsAdapter = new FontsAdapter(this, fonts, fontProvider);
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.select_font)
+                .setAdapter(fontsAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        TextEntity textEntity = currentTextEntity();
+                        if (textEntity != null) {
+                            textEntity.getLayer().getFont().setFace(fonts.get(which));
+                            textEntity.updateEntity();
+                            motionView.invalidate();
+                        }
+                    }
+                })
+                .show();
+    }
+
+    @Nullable
+    private TextEntity currentTextEntity() {
+        if (motionView != null && motionView.getSelectedEntity() instanceof TextEntity) {
+            return ((TextEntity) motionView.getSelectedEntity());
+        } else {
+            return null;
+        }
     }
 
     private TextLayer createTextLayer() {
