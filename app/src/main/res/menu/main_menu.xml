@@ -4,8 +4,15 @@
 
     <item
         android:id="@+id/main_add_sticker"
-        android:icon="@drawable/ic_action_add"
+        android:icon="@drawable/ic_add"
         android:title="@string/add_sticker"
+        app:showAsAction="ifRoom"
+        />
+
+    <item
+        android:id="@+id/main_add_text"
+        android:icon="@drawable/ic_add_text"
+        android:title="@string/add_text"
         app:showAsAction="ifRoom"
         />
 

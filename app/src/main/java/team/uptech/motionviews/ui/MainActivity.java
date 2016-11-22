@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import java.util.List;
 
+import team.uptech.motionviews.BuildConfig;
 import team.uptech.motionviews.R;
 import team.uptech.motionviews.ui.adapter.FontsAdapter;
 import team.uptech.motionviews.utils.FontProvider;
@@ -30,15 +32,12 @@ import team.uptech.motionviews.widget.entity.ImageEntity;
 import team.uptech.motionviews.widget.entity.MotionEntity;
 import team.uptech.motionviews.widget.entity.TextEntity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TextEditorFragment.OnTextLayerCallback {
 
     public static final int SELECT_STICKER_REQUEST_CODE = 123;
 
     protected MotionView motionView;
     protected View textEntityEditPanel;
-
-    private FontProvider fontProvider;
-
     private final MotionView.MotionViewCallback motionViewCallback = new MotionView.MotionViewCallback() {
         @Override
         public void onEntitySelected(@Nullable MotionEntity entity) {
@@ -51,9 +50,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onEntityDoubleTap(@NonNull MotionEntity entity) {
-
+            startTextEntityEditing();
         }
     };
+    private FontProvider fontProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,21 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         addSticker(R.drawable.pikachu_2);
 
-        addTextSticker();
-
         initTextEntitiesListeners();
-    }
-
-    protected void addTextSticker() {
-        motionView.post(new Runnable() {
-            @Override
-            public void run() {
-                TextLayer textLayer = createTextLayer();
-                TextEntity textEntity = new TextEntity(textLayer, motionView.getWidth(),
-                        motionView.getHeight(), fontProvider);
-                motionView.addEntityAndPosition(textEntity);
-            }
-        });
     }
 
     private void addSticker(final int stickerResId) {
@@ -127,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.text_entity_edit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startTextEntityEditing();
             }
         });
     }
@@ -203,6 +189,14 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
+    private void startTextEntityEditing() {
+        TextEntity textEntity = currentTextEntity();
+        if (textEntity != null) {
+            TextEditorFragment fragment = TextEditorFragment.getInstance(textEntity.getLayer().getText());
+            fragment.show(getFragmentManager(), TextEditorFragment.class.getName());
+        }
+    }
+
     @Nullable
     private TextEntity currentTextEntity() {
         if (motionView != null && motionView.getSelectedEntity() instanceof TextEntity) {
@@ -210,20 +204,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return null;
         }
-    }
-
-    private TextLayer createTextLayer() {
-        TextLayer textLayer = new TextLayer();
-        Font font = new Font();
-
-        font.setColor(TextLayer.Limits.INITIAL_FONT_COLOR);
-        font.setSize(TextLayer.Limits.INITIAL_FONT_SIZE);
-        font.setFace(fontProvider.getDefaultFontName());
-
-        textLayer.setFont(font);
-
-        textLayer.setText("Hello, world :))");
-        return textLayer;
     }
 
     @Override
@@ -239,8 +219,44 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, StickerSelectActivity.class);
             startActivityForResult(intent, SELECT_STICKER_REQUEST_CODE);
             return true;
+        } else if (item.getItemId() == R.id.main_add_text) {
+            addTextSticker();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void addTextSticker() {
+        TextLayer textLayer = createTextLayer();
+        TextEntity textEntity = new TextEntity(textLayer, motionView.getWidth(),
+                motionView.getHeight(), fontProvider);
+        motionView.addEntityAndPosition(textEntity);
+
+        // move text sticker up so that its not hidden under keyboard
+        PointF center = textEntity.absoluteCenter();
+        center.y = center.y * 0.5F;
+        textEntity.moveCenterTo(center);
+
+        // redraw
+        motionView.invalidate();
+
+        startTextEntityEditing();
+    }
+
+    private TextLayer createTextLayer() {
+        TextLayer textLayer = new TextLayer();
+        Font font = new Font();
+
+        font.setColor(TextLayer.Limits.INITIAL_FONT_COLOR);
+        font.setSize(TextLayer.Limits.INITIAL_FONT_SIZE);
+        font.setFace(fontProvider.getDefaultFontName());
+
+        textLayer.setFont(font);
+
+        if (BuildConfig.DEBUG) {
+            textLayer.setText("Hello, world :))");
+        }
+
+        return textLayer;
     }
 
     @Override
@@ -254,6 +270,19 @@ public class MainActivity extends AppCompatActivity {
                         addSticker(stickerId);
                     }
                 }
+            }
+        }
+    }
+
+    @Override
+    public void textChanged(@NonNull String text) {
+        TextEntity textEntity = currentTextEntity();
+        if (textEntity != null) {
+            TextLayer textLayer = textEntity.getLayer();
+            if (!text.equals(textLayer.getText())) {
+                textLayer.setText(text);
+                textEntity.updateEntity();
+                motionView.invalidate();
             }
         }
     }
