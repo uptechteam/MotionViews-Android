@@ -25,27 +25,16 @@ public class Layer {
      */
     private boolean isFlipped;
 
-    /**
-     * minimum scale
-     */
-    private float minScale;
-    /**
-     * maximum scale
-     */
-    private float maxScale;
-
     public Layer() {
         reset();
     }
 
-    private void reset() {
+    protected void reset() {
         this.rotationInDegrees = 0.0F;
         this.scale = 1.0F;
         this.isFlipped = false;
         this.x = 0.0F;
         this.y = 0.0F;
-        this.minScale = Limits.MIN_SCALE;
-        this.maxScale = Limits.MAX_SCALE;
     }
 
     public void postScale(float scaleDiff) {
@@ -55,20 +44,12 @@ public class Layer {
         }
     }
 
-    public float getMaxScale() {
-        return maxScale;
+    protected float getMaxScale() {
+        return Limits.MAX_SCALE;
     }
 
-    public float getMinScale() {
-        return minScale;
-    }
-
-    public void setMinScale(float minScale) {
-        this.minScale = minScale;
-    }
-
-    public void setMaxScale(float maxScale) {
-        this.maxScale = maxScale;
+    protected float getMinScale() {
+        return Limits.MIN_SCALE;
     }
 
     public void postRotate(float rotationInDegreesDiff) {

@@ -1,4 +1,4 @@
-package team.uptech.motionviews;
+package team.uptech.motionviews.ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,10 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import team.uptech.motionviews.ui.StickerSelectActivity;
+import team.uptech.motionviews.R;
+import team.uptech.motionviews.utils.FontProvider;
+import team.uptech.motionviews.viewmodel.Font;
 import team.uptech.motionviews.viewmodel.Layer;
+import team.uptech.motionviews.viewmodel.TextLayer;
 import team.uptech.motionviews.widget.MotionView;
 import team.uptech.motionviews.widget.entity.ImageEntity;
+import team.uptech.motionviews.widget.entity.TextEntity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,14 +23,32 @@ public class MainActivity extends AppCompatActivity {
 
     protected MotionView motionView;
 
+    private FontProvider fontProvider;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.fontProvider = new FontProvider(getResources());
+
         motionView = (MotionView) findViewById(R.id.main_motion_view);
 
         addSticker(R.drawable.pikachu_2);
+
+        addTextSticker();
+    }
+
+    protected void addTextSticker() {
+        motionView.post(new Runnable() {
+            @Override
+            public void run() {
+                TextLayer textLayer = createTextLayer();
+                TextEntity textEntity = new TextEntity(textLayer, motionView.getWidth(),
+                        motionView.getHeight(), fontProvider);
+                motionView.addEntityAndPosition(textEntity);
+            }
+        });
     }
 
     private void addSticker(final int stickerResId) {
@@ -41,6 +63,18 @@ public class MainActivity extends AppCompatActivity {
                 motionView.addEntityAndPosition(entity);
             }
         });
+    }
+
+    private TextLayer createTextLayer() {
+        TextLayer textLayer = new TextLayer();
+        Font font = new Font();
+        font.setColor(TextLayer.Limits.INITIAL_FONT_COLOR);
+        font.setSize(0.066F);//TextLayer.Limits.INITIAL_FONT_SIZE);
+        // TODO: set typeface
+        textLayer.setFont(font);
+
+        textLayer.setText("Hello, world :))");
+        return textLayer;
     }
 
     @Override
