@@ -215,9 +215,11 @@ public class MainActivity extends AppCompatActivity {
     private TextLayer createTextLayer() {
         TextLayer textLayer = new TextLayer();
         Font font = new Font();
+
         font.setColor(TextLayer.Limits.INITIAL_FONT_COLOR);
-        font.setSize(0.066F);//TextLayer.Limits.INITIAL_FONT_SIZE);
-        // TODO: set typeface
+        font.setSize(TextLayer.Limits.INITIAL_FONT_SIZE);
+        font.setFace(fontProvider.getDefaultFontName());
+
         textLayer.setFont(font);
 
         textLayer.setText("Hello, world :))");

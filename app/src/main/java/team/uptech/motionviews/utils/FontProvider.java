@@ -16,6 +16,8 @@ import java.util.Map;
  */
 public class FontProvider {
 
+    private static final String DEFAULT_FONT_NAME = "Helvetica";
+
     private final Map<String, Typeface> typefaces;
     private final Map<String, String> fontNameToTypefaceFile;
     private final Resources resources;
@@ -58,5 +60,9 @@ public class FontProvider {
 
     public List<String> getFontNames() {
         return fontNames;
+    }
+
+    public String getDefaultFontName() {
+        return DEFAULT_FONT_NAME;
     }
 }
