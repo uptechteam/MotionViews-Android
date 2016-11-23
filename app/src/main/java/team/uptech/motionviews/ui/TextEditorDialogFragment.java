@@ -25,13 +25,13 @@ import team.uptech.motionviews.R;
  * Transparent Dialog Fragment, with no title and no background
  * <p>
  * The fragment imitates capturing input from keyboard, but does not display anything
- * the result from input from the keyboard is passed through {@link TextEditorFragment.OnTextLayerCallback}
+ * the result from input from the keyboard is passed through {@link TextEditorDialogFragment.OnTextLayerCallback}
  * <p>
- * Activity that uses {@link TextEditorFragment} must implement {@link TextEditorFragment.OnTextLayerCallback}
+ * Activity that uses {@link TextEditorDialogFragment} must implement {@link TextEditorDialogFragment.OnTextLayerCallback}
  * <p>
- * If Activity does not implement {@link TextEditorFragment.OnTextLayerCallback}, exception will be thrown at Runtime
+ * If Activity does not implement {@link TextEditorDialogFragment.OnTextLayerCallback}, exception will be thrown at Runtime
  */
-public class TextEditorFragment extends DialogFragment {
+public class TextEditorDialogFragment extends DialogFragment {
 
     public static final String ARG_TEXT = "editor_text_arg";
 
@@ -41,16 +41,16 @@ public class TextEditorFragment extends DialogFragment {
 
     /**
      * deprecated
-     * use {@link TextEditorFragment#getInstance(String)}
+     * use {@link TextEditorDialogFragment#getInstance(String)}
      */
     @Deprecated
-    public TextEditorFragment() {
+    public TextEditorDialogFragment() {
         // empty, use getInstance
     }
 
-    public static TextEditorFragment getInstance(String textValue) {
+    public static TextEditorDialogFragment getInstance(String textValue) {
         @SuppressWarnings("deprecation")
-        TextEditorFragment fragment = new TextEditorFragment();
+        TextEditorDialogFragment fragment = new TextEditorDialogFragment();
         Bundle args = new Bundle();
         args.putString(ARG_TEXT, textValue);
         fragment.setArguments(args);
@@ -198,7 +198,7 @@ public class TextEditorFragment extends DialogFragment {
 
     /**
      * Callback that passes all user input through the method
-     * {@link TextEditorFragment.OnTextLayerCallback#textChanged(String)}
+     * {@link TextEditorDialogFragment.OnTextLayerCallback#textChanged(String)}
      */
     public interface OnTextLayerCallback {
         void textChanged(@NonNull String text);

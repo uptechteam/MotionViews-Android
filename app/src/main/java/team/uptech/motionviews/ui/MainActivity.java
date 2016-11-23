@@ -32,7 +32,7 @@ import team.uptech.motionviews.widget.entity.ImageEntity;
 import team.uptech.motionviews.widget.entity.MotionEntity;
 import team.uptech.motionviews.widget.entity.TextEntity;
 
-public class MainActivity extends AppCompatActivity implements TextEditorFragment.OnTextLayerCallback {
+public class MainActivity extends AppCompatActivity implements TextEditorDialogFragment.OnTextLayerCallback {
 
     public static final int SELECT_STICKER_REQUEST_CODE = 123;
 
@@ -192,8 +192,8 @@ public class MainActivity extends AppCompatActivity implements TextEditorFragmen
     private void startTextEntityEditing() {
         TextEntity textEntity = currentTextEntity();
         if (textEntity != null) {
-            TextEditorFragment fragment = TextEditorFragment.getInstance(textEntity.getLayer().getText());
-            fragment.show(getFragmentManager(), TextEditorFragment.class.getName());
+            TextEditorDialogFragment fragment = TextEditorDialogFragment.getInstance(textEntity.getLayer().getText());
+            fragment.show(getFragmentManager(), TextEditorDialogFragment.class.getName());
         }
     }
 
