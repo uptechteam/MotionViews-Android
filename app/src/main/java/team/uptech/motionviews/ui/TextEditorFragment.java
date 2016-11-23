@@ -21,6 +21,16 @@ import android.widget.EditText;
 
 import team.uptech.motionviews.R;
 
+/**
+ * Transparent Dialog Fragment, with no title and no background
+ * <p>
+ * The fragment imitates capturing input from keyboard, but does not display anything
+ * the result from input from the keyboard is passed through {@link TextEditorFragment.OnTextLayerCallback}
+ * <p>
+ * Activity that uses {@link TextEditorFragment} must implement {@link TextEditorFragment.OnTextLayerCallback}
+ * <p>
+ * If Activity does not implement {@link TextEditorFragment.OnTextLayerCallback}, exception will be thrown at Runtime
+ */
 public class TextEditorFragment extends DialogFragment {
 
     public static final String ARG_TEXT = "editor_text_arg";
@@ -28,6 +38,15 @@ public class TextEditorFragment extends DialogFragment {
     protected EditText editText;
 
     private OnTextLayerCallback callback;
+
+    /**
+     * deprecated
+     * use {@link TextEditorFragment#getInstance(String)}
+     */
+    @Deprecated
+    public TextEditorFragment() {
+        // empty, use getInstance
+    }
 
     public static TextEditorFragment getInstance(String textValue) {
         @SuppressWarnings("deprecation")
@@ -38,9 +57,15 @@ public class TextEditorFragment extends DialogFragment {
         return fragment;
     }
 
-    @Deprecated
-    public TextEditorFragment() {
-        // empty, use getInstance
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof OnTextLayerCallback) {
+            this.callback = (OnTextLayerCallback) activity;
+        } else {
+            throw new IllegalStateException(activity.getClass().getName()
+                    + " must implement " + OnTextLayerCallback.class.getName());
+        }
     }
 
     @Override
@@ -103,18 +128,20 @@ public class TextEditorFragment extends DialogFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        editText.post(new Runnable() {
-            @Override
-            public void run() {
-                // force show the keyboard
-                setEditText(true);
-                editText.requestFocus();
-                InputMethodManager ims = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                ims.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
+    public void dismiss() {
+        super.dismiss();
+
+        // clearing memory on exit, cos manipulating with text uses bitmaps extensively
+        // this does not frees memory immediately, but still can help
+        System.gc();
+        Runtime.getRuntime().gc();
+    }
+
+    @Override
+    public void onDetach() {
+        // release links
+        this.callback = null;
+        super.onDetach();
     }
 
     @NonNull
@@ -133,6 +160,7 @@ public class TextEditorFragment extends DialogFragment {
         if (dialog != null) {
             Window window = dialog.getWindow();
             if (window != null) {
+                // remove background
                 window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
@@ -145,12 +173,18 @@ public class TextEditorFragment extends DialogFragment {
     }
 
     @Override
-    public void dismiss() {
-        super.dismiss();
-
-        // clearing memory on exit, cos manipulating with text uses bitmaps extensively
-        System.gc();
-        Runtime.getRuntime().gc();
+    public void onResume() {
+        super.onResume();
+        editText.post(new Runnable() {
+            @Override
+            public void run() {
+                // force show the keyboard
+                setEditText(true);
+                editText.requestFocus();
+                InputMethodManager ims = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                ims.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
     }
 
     private void setEditText(boolean gainFocus) {
@@ -162,23 +196,10 @@ public class TextEditorFragment extends DialogFragment {
         editText.setFocusable(gainFocus);
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof OnTextLayerCallback) {
-            this.callback = (OnTextLayerCallback) activity;
-        } else {
-            throw new IllegalStateException(activity.getClass().getName()
-                    + " must implement " + OnTextLayerCallback.class.getName());
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        this.callback = null;
-        super.onDetach();
-    }
-
+    /**
+     * Callback that passes all user input through the method
+     * {@link TextEditorFragment.OnTextLayerCallback#textChanged(String)}
+     */
     public interface OnTextLayerCallback {
         void textChanged(@NonNull String text);
     }

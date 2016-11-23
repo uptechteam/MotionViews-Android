@@ -28,7 +28,7 @@ public abstract class MotionEntity {
      * true - entity is selected and need to draw it's border
      * false - not selected, no need to draw it's border
      */
-    protected boolean isSelected;
+    private boolean isSelected;
 
     /**
      * maximum scale of the initial image, so that
@@ -53,7 +53,7 @@ public abstract class MotionEntity {
      * last point is the same as first to close the circle
      * NOTE: saved as a field variable in order to avoid creating array in draw()-like methods
      */
-    protected final float[] destPoints = new float[10]; // x0, y0, x1, y1, x2, y2, x3, y3, x0, y0
+    private final float[] destPoints = new float[10]; // x0, y0, x1, y1, x2, y2, x3, y3, x0, y0
     /**
      * Initial points of the entity
      * @see #destPoints
@@ -61,7 +61,7 @@ public abstract class MotionEntity {
     protected final float[] srcPoints = new float[10];  // x0, y0, x1, y1, x2, y2, x3, y3, x0, y0
 
     @NonNull
-    protected Paint borderPaint = new Paint();
+    private Paint borderPaint = new Paint();
 
     public MotionEntity(@NonNull Layer layer,
                         @IntRange(from = 1) int canvasWidth,
@@ -71,7 +71,7 @@ public abstract class MotionEntity {
         this.canvasHeight = canvasHeight;
     }
 
-    public boolean isSelected() {
+    private boolean isSelected() {
         return isSelected;
     }
 
@@ -219,7 +219,7 @@ public abstract class MotionEntity {
         canvas.restore();
     }
 
-    protected void drawSelectedBg(Canvas canvas) {
+    private void drawSelectedBg(Canvas canvas) {
         matrix.mapPoints(destPoints, srcPoints);
         //noinspection Range
         canvas.drawLines(destPoints, 0, 8, borderPaint);

@@ -28,6 +28,7 @@ public class FontProvider {
 
         typefaces = new HashMap<>();
 
+        // populate fonts
         fontNameToTypefaceFile = new HashMap<>();
         fontNameToTypefaceFile.put("Arial", "Arial.ttf");
         fontNameToTypefaceFile.put("Eutemia", "Eutemia.ttf");
@@ -45,6 +46,10 @@ public class FontProvider {
         fontNames = new ArrayList<>(fontNameToTypefaceFile.keySet());
     }
 
+    /**
+     * @param typefaceName must be one of the font names provided from {@link FontProvider#getFontNames()}
+     * @return the Typeface associated with {@code typefaceName}, or {@link Typeface#DEFAULT} otherwise
+     */
     public Typeface getTypeface(@Nullable String typefaceName) {
         if (TextUtils.isEmpty(typefaceName)) {
             return Typeface.DEFAULT;
@@ -58,10 +63,18 @@ public class FontProvider {
         }
     }
 
+    /**
+     * use {@link FontProvider#getTypeface(String) to get Typeface for the font name}
+     *
+     * @return list of available font names
+     */
     public List<String> getFontNames() {
         return fontNames;
     }
 
+    /**
+     * @return Default Font Name - <b>Helvetica</b>
+     */
     public String getDefaultFontName() {
         return DEFAULT_FONT_NAME;
     }

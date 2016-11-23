@@ -1,13 +1,18 @@
 package team.uptech.motionviews.viewmodel;
 
-import java.io.Serializable;
+public class Font {
 
-public class Font implements Serializable {
-
-    private static final float MIN_FONT_SIZE = 0.01F;
-
+    /**
+     * color value (ex: 0xFF00FF)
+     */
     private int color;
+    /**
+     * name of the font
+     */
     private String face;
+    /**
+     * size of the font, relative to parent
+     */
     private float size;
 
     public Font() {
@@ -18,7 +23,7 @@ public class Font implements Serializable {
     }
 
     public void decreaseSize(float diff) {
-        if (size - diff >= MIN_FONT_SIZE) {
+        if (size - diff >= Limits.MIN_FONT_SIZE) {
             size = size - diff;
         }
     }
@@ -45,5 +50,9 @@ public class Font implements Serializable {
 
     public void setSize(float size) {
         this.size = size;
+    }
+
+    private interface Limits {
+        float MIN_FONT_SIZE = 0.01F;
     }
 }

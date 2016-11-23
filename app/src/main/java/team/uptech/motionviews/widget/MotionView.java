@@ -65,27 +65,27 @@ public class MotionView  extends FrameLayout {
     // constructors
     public MotionView(Context context) {
         super(context);
-        init(context, null);
+        init(context);
     }
 
     public MotionView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
+        init(context);
     }
 
     public MotionView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
+        init(context);
     }
 
     @SuppressWarnings("unused")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public MotionView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init(context, attrs);
+        init(context);
     }
 
-    private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
+    private void init(@NonNull Context context) {
         // I fucking love Android
         setWillNotDraw(false);
 
@@ -112,7 +112,7 @@ public class MotionView  extends FrameLayout {
         return entities;
     }
 
-    public void setMotionViewCallback(MotionViewCallback callback) {
+    public void setMotionViewCallback(@Nullable MotionViewCallback callback) {
         this.motionViewCallback = callback;
     }
 
@@ -162,12 +162,20 @@ public class MotionView  extends FrameLayout {
         super.onDraw(canvas);
     }
 
-    public void drawAllEntities(Canvas canvas) {
+    /**
+     * draws all entities on the canvas
+     * @param canvas Canvas where to draw all entities
+     */
+    private void drawAllEntities(Canvas canvas) {
         for (int i = 0; i < entities.size(); i++) {
             entities.get(i).draw(canvas, null);
         }
     }
 
+    /**
+     * as a side effect - the method deselects Entity (if any selected)
+     * @return bitmap with all the Entities at their current positions
+     */
     public Bitmap getThumbnailImage() {
         selectEntity(null, false);
 
