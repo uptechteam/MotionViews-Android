@@ -34,10 +34,6 @@ public class TextEntity extends MotionEntity {
         updateEntity(false);
     }
 
-    public void updateEntity() {
-        updateEntity(true);
-    }
-
     private void updateEntity(boolean moveToPreviousCenter) {
 
         // save previous center
@@ -79,6 +75,14 @@ public class TextEntity extends MotionEntity {
         }
     }
 
+    /**
+     * If reuseBmp is not null, and size of the new bitmap matches the size of the reuseBmp,
+     * new bitmap won't be created, reuseBmp it will be reused instead
+     *
+     * @param textLayer text to draw
+     * @param reuseBmp  the bitmap that will be reused
+     * @return bitmap with the text
+     */
     @NonNull
     private Bitmap createBitmap(@NonNull TextLayer textLayer, @Nullable Bitmap reuseBmp) {
 
@@ -158,5 +162,9 @@ public class TextEntity extends MotionEntity {
     @Override
     public int getHeight() {
         return bitmap != null ? bitmap.getHeight() : 0;
+    }
+
+    public void updateEntity() {
+        updateEntity(true);
     }
 }
