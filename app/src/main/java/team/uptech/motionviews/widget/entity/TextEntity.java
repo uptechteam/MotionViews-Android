@@ -2,6 +2,7 @@ package team.uptech.motionviews.widget.entity;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.support.annotation.IntRange;
@@ -42,13 +43,14 @@ public class TextEntity extends MotionEntity {
         // save previous center
         PointF oldCenter = absoluteCenter();
 
-        // recycle previous bitmap as soon as possible
-        if (bitmap != null && !bitmap.isRecycled()) {
+        Bitmap newBmp = createBitmap(getLayer(), bitmap);
+
+        // recycle previous bitmap (if not reused) as soon as possible
+        if (bitmap != null && bitmap != newBmp && !bitmap.isRecycled()) {
             bitmap.recycle();
-            bitmap = null;
         }
 
-        this.bitmap = createBitmap(getLayer());
+        this.bitmap = newBmp;
 
         float width = bitmap.getWidth();
         float height = bitmap.getHeight();
@@ -77,7 +79,8 @@ public class TextEntity extends MotionEntity {
         }
     }
 
-    private Bitmap createBitmap(TextLayer textLayer) {
+    @NonNull
+    private Bitmap createBitmap(@NonNull TextLayer textLayer, @Nullable Bitmap reuseBmp) {
 
         int boundsWidth = canvasWidth;
 
@@ -101,11 +104,20 @@ public class TextEntity extends MotionEntity {
         // calculate height for the entity, min - Limits.MIN_BITMAP_HEIGHT
         int boundsHeight = sl.getHeight();
 
+        // create bitmap not smaller than TextLayer.Limits.MIN_BITMAP_HEIGHT
         int bmpHeight = (int) (canvasHeight * Math.max(TextLayer.Limits.MIN_BITMAP_HEIGHT,
                 1.0F * boundsHeight / canvasHeight));
 
         // create bitmap where text will be drawn
-        Bitmap bmp = Bitmap.createBitmap(boundsWidth, bmpHeight, Bitmap.Config.ARGB_8888);
+        Bitmap bmp;
+        if (reuseBmp != null && reuseBmp.getWidth() == boundsWidth
+                && reuseBmp.getHeight() == bmpHeight) {
+            // if previous bitmap exists, and it's width/height is the same - reuse it
+            bmp = reuseBmp;
+            bmp.eraseColor(Color.TRANSPARENT); // erase color when reusing
+        } else {
+            bmp = Bitmap.createBitmap(boundsWidth, bmpHeight, Bitmap.Config.ARGB_8888);
+        }
 
         Canvas canvas = new Canvas(bmp);
         canvas.save();
