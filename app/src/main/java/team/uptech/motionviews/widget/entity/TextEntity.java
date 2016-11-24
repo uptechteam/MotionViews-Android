@@ -79,9 +79,10 @@ public class TextEntity extends MotionEntity {
 
     private Bitmap createBitmap(TextLayer textLayer) {
 
-        int boundsWidth = (int) (canvasWidth * TextLayer.Limits.TEXT_CONTENT_PART);
+        int boundsWidth = canvasWidth;
 
         // init params - size, color, typeface
+        textPaint.setStyle(Paint.Style.FILL);
         textPaint.setTextSize(textLayer.getFont().getSize() * canvasWidth);
         textPaint.setColor(textLayer.getFont().getColor());
         textPaint.setTypeface(fontProvider.getTypeface(textLayer.getFont().getFace()));

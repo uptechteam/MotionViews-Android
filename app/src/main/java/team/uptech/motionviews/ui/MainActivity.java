@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements TextEditorDialogF
                 .setTitle(R.string.select_color)
                 .initialColor(initialColor)
                 .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
-                .density(8)
+                .density(8) // magic number
                 .setPositiveButton(R.string.ok, new ColorPickerClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
