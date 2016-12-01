@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements TextEditorDialogF
                     public void onClick(DialogInterface dialogInterface, int which) {
                         TextEntity textEntity = currentTextEntity();
                         if (textEntity != null) {
-                            textEntity.getLayer().getFont().setFace(fonts.get(which));
+                            textEntity.getLayer().getFont().setTypeface(fonts.get(which));
                             textEntity.updateEntity();
                             motionView.invalidate();
                         }
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements TextEditorDialogF
 
         font.setColor(TextLayer.Limits.INITIAL_FONT_COLOR);
         font.setSize(TextLayer.Limits.INITIAL_FONT_SIZE);
-        font.setFace(fontProvider.getDefaultFontName());
+        font.setTypeface(fontProvider.getDefaultFontName());
 
         textLayer.setFont(font);
 

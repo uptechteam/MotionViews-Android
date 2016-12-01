@@ -9,7 +9,7 @@ public class Font {
     /**
      * name of the font
      */
-    private String face;
+    private String typeface;
     /**
      * size of the font, relative to parent
      */
@@ -36,12 +36,12 @@ public class Font {
         this.color = color;
     }
 
-    public String getFace() {
-        return face;
+    public String getTypeface() {
+        return typeface;
     }
 
-    public void setFace(String face) {
-        this.face = face;
+    public void setTypeface(String typeface) {
+        this.typeface = typeface;
     }
 
     public float getSize() {
