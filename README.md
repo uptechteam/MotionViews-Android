@@ -28,8 +28,8 @@ update them, and manipulate in the same way as with image stickers**.
 **MotionViews-Android** - is fully functional app that meets the requirements.
 
 Check the Medium articles [How to create Snapchat-like stickers for Android](https://medium.com/uptech-team/how-to-create-snapchat-like-stickers-for-android-50512957c351) 
-and [How to create beautiful text stickers for Android](https://medium.com/uptech-team/how-to-create-beautiful-text-stickers-for-android-10eeea0cee09) about the details of the implementation:
+and [How to create beautiful text stickers for Android](https://medium.com/uptech-team/how-to-create-beautiful-text-stickers-for-android-10eeea0cee09) about the details of the implementation.
 
-Feel free to use the code for your own purposes.
+Feel free to use the code for your own purposes. Check out the app on [Google Play](https://play.google.com/store/apps/details?id=team.uptech.motionviews).
 
 The video of what we got in the end on the YouTube: [Image Stickers](https://www.youtube.com/watch?v=6IkmFmlrLPA) and [Text Stickers](https://www.youtube.com/watch?v=9q86Dx9-xTA).
