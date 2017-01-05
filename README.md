@@ -1,6 +1,6 @@
 # MotionViews-Android
 
-![alt tag](https://appetize.io/embed/kd51amwzp7fg4f8wrrb5mz673w?device=nexus5&scale=75&orientation=portrait&osVersion=7.0)
+![alt tag](https://media.giphy.com/media/l0MYIVOav4AQvj08U/source.gif)
 
 ## Code Guide : How to create Snapchat-like image stickers and text stickers
 
@@ -32,6 +32,10 @@ update them, and manipulate in the same way as with image stickers**.
 Check the Medium articles [How to create Snapchat-like stickers for Android](https://medium.com/uptech-team/how-to-create-snapchat-like-stickers-for-android-50512957c351) 
 and [How to create beautiful text stickers for Android](https://medium.com/uptech-team/how-to-create-beautiful-text-stickers-for-android-10eeea0cee09) about the details of the implementation.
 
-Feel free to use the code for your own purposes. Check out the app on [Google Play](https://play.google.com/store/apps/details?id=team.uptech.motionviews).
+Feel free to use the code for your own purposes. 
+
+Check out the app on [Google Play](https://play.google.com/store/apps/details?id=team.uptech.motionviews).
+
+Play with the online app emulator on [Appetize.io](https://appetize.io/app/kd51amwzp7fg4f8wrrb5mz673w).
 
 The video of what we got in the end on the YouTube: [Image Stickers](https://www.youtube.com/watch?v=6IkmFmlrLPA) and [Text Stickers](https://www.youtube.com/watch?v=9q86Dx9-xTA).
