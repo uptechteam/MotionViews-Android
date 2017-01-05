@@ -1,6 +1,6 @@
 # MotionViews-Android
 
-![alt tag](https://media.giphy.com/media/l0MYIVOav4AQvj08U/source.gif)
+![alt tag](http://i.giphy.com/3o7TKJhBZiimAe6JDG.gif)
 
 ## Code Guide : How to create Snapchat-like image stickers and text stickers
 
