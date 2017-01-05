@@ -1,5 +1,7 @@
 # MotionViews-Android
 
+![alt tag](https://appetize.io/embed/kd51amwzp7fg4f8wrrb5mz673w?device=nexus5&scale=75&orientation=portrait&osVersion=7.0)
+
 ## Code Guide : How to create Snapchat-like image stickers and text stickers
 
 After spending 2000+ hours and releasing 4+ successful apps working with 
