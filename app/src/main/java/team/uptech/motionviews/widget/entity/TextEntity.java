@@ -167,4 +167,11 @@ public class TextEntity extends MotionEntity {
     public void updateEntity() {
         updateEntity(true);
     }
+
+    @Override
+    public void release() {
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
+        }
+    }
 }
