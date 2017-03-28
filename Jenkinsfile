@@ -1,6 +1,11 @@
 #!groovy​
 pipeline {
     agent any 
+
+    tools {
+        android-sdk
+    }
+    
     stages {
         stage('Checkout') { steps { checkout scm } }
 
