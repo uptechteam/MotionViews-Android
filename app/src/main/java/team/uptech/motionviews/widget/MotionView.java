@@ -123,6 +123,13 @@ public class MotionView  extends FrameLayout {
         }
     }
 
+    public void deleteEntity(@Nullable MotionEntity entity) {
+        if (entity != null) {
+            entities.remove(entity);
+            selectEntity(null, true);
+        }
+    }
+
     public void addEntityAndPosition(@Nullable MotionEntity entity) {
         if (entity != null) {
             initEntityBorder(entity);
