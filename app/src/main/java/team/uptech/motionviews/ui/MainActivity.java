@@ -116,6 +116,19 @@ public class MainActivity extends AppCompatActivity implements TextEditorDialogF
                 startTextEntityEditing();
             }
         });
+        findViewById(R.id.text_entity_delete).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteTextEntity();
+            }
+        });
+    }
+
+    private void deleteTextEntity() {
+        TextEntity textEntity = currentTextEntity();
+        if (textEntity != null) {
+            motionView.deleteEntity(textEntity);
+        }
     }
 
     private void increaseTextEntitySize() {
