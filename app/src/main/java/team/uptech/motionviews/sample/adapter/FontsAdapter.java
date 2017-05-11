@@ -1,4 +1,4 @@
-package team.uptech.motionviews.ui.adapter;
+package team.uptech.motionviews.sample.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

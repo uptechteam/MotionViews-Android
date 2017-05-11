@@ -1,4 +1,4 @@
-package team.uptech.motionviews.ui;
+package team.uptech.motionviews.sample;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,9 +20,7 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import java.util.List;
 
-import team.uptech.motionviews.BuildConfig;
-import team.uptech.motionviews.R;
-import team.uptech.motionviews.ui.adapter.FontsAdapter;
+import team.uptech.motionviews.sample.adapter.FontsAdapter;
 import team.uptech.motionviews.utils.FontProvider;
 import team.uptech.motionviews.viewmodel.Font;
 import team.uptech.motionviews.viewmodel.Layer;
