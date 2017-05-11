@@ -1,4 +1,4 @@
-package team.uptech.motionviews.ui;
+package team.uptech.motionviews.sample;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +17,6 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import team.uptech.motionviews.R;
 
 /**
  * selects sticker

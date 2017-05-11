@@ -1,4 +1,4 @@
-package team.uptech.motionviews.ui;
+package team.uptech.motionviews.sample;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -18,8 +18,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-
-import team.uptech.motionviews.R;
 
 /**
  * Transparent Dialog Fragment, with no title and no background
