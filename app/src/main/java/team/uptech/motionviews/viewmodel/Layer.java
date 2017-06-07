@@ -37,7 +37,7 @@ public class Layer {
     }
 
     public void postScale(float scaleDiff) {
-        float newVal = scale + scaleDiff;
+        float newVal = scale * scaleDiff;
         if (newVal >= getMinScale() && newVal <= getMaxScale()) {
             scale = newVal;
         }
