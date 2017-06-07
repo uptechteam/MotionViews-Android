@@ -356,7 +356,7 @@ public class MotionView  extends FrameLayout {
         public boolean onScale(ScaleGestureDetector detector) {
             if (selectedEntity != null) {
                 float scaleFactorDiff = detector.getScaleFactor();
-                selectedEntity.getLayer().postScale(scaleFactorDiff - 1.0F);
+                selectedEntity.getLayer().postScale(scaleFactorDiff);
                 updateUI();
             }
             return true;
